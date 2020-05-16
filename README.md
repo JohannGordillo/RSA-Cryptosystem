@@ -1,4 +1,4 @@
-# Criptosistema RSA (Rivest-Shamir-Adleman)
+# Criptosistema RSA (Rivest-Shamir-Adleman) :lock: :key:
 Implementación sencilla de los algoritmos de cifrado y descifrado del criptosistema RSA.
 Se incluye un algoritmo probabilístico de generación de números primos para cifrar textos.
 
