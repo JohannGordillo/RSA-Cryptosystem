@@ -56,16 +56,23 @@ def main():
 
             # Leemos el archivo.
             with open(src) as f:
-                msg = [int(m) for m in f.read().split()]
+                msg = f.read()
 
-            p = rsa.generate_prime_number(5)
-            q = rsa.generate_prime_number(5)
+            # Generamos dos primos aleatorios distintos de entre 50 y 60 dígitos.
+            p = rsa.generate_prime_number(1, 2)
+            q = p
+            while q == p:
+                q = rsa.generate_prime_number(1, 2)
 
             public_key, private_key = rsa.generate_keys(p, q)
 
-            ciphertext = rsa.encrypt(public_key, msg)
+            ciphertext = ' '.join([str(c) for c in rsa.encrypt(public_key, msg)])
 
-            print(f"Su llave pública es: {public_key}\nSu llave privada es: {private_key}\nSu texto cifrado es: {ciphertext}")
+            print(f"Su llave pública es: {public_key}\nSu llave privada es: {private_key}")
+
+            with open("salida.txt","w+") as out:
+                for c in ciphertext:
+                    out.write(c)
 
             input("\nPresione <ENTER> para continuar... ")
             clean_console()
@@ -76,7 +83,7 @@ def main():
 
             # Leemos el archivo.
             with open(src) as f:
-                ciphertext = [int(c) for c in f.read().split()]
+                text = f.read()
 
             # Obtenemos la llave pública.
             print(">> Ingrese la llave pública [n, e]: (ejemplo: 567 785): ")
@@ -89,13 +96,12 @@ def main():
 
             keys = (public_key, private_key)
 
+            ciphertext = [int(c) for c in text.split()] 
+
             # Obtenemos el mensaje descifrado como una lista de números.
             msg = rsa.decrypt(ciphertext, keys)
 
-            # Pasamos la lista de números a una cadena de texto.
-            text = rsa.numbers_to_text(msg)
-
-            print(f"\nSu texto descifrado es:\n{text}")
+            print(f"\nSu texto descifrado es:\n{msg}")
 
             input("\nPresione <ENTER> para continuar... ")
             clean_console()
