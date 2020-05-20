@@ -66,15 +66,19 @@ def main():
             while q == p:
                 q = rsa.generate_prime_number(50, 60)
 
+            # Obtenemos las claves pública y privada.
             public_key, private_key = rsa.generate_keys(p, q)
 
+            # Cadena con el texto cifrado.
             ciphertext = ' '.join([str(c) for c in rsa.encrypt(public_key, msg)])
 
             print(f"Su llave pública es: {public_key}\nSu llave privada es: {private_key}")
 
-            with open("salida.txt","w+") as out:
-                for c in ciphertext:
-                    out.write(c)
+            # Escribimos el texto cifrado en un archivo salida.txt
+            # Se crea en el directorio actual.
+            with open("salida.txt", "w+") as out:
+                out.write(ciphertext)
+                print(f"\nEl archivo salida.txt se ha creado en {os.getcwd()}")
 
             input("\nPresione <ENTER> para continuar... ")
             clean_console()
@@ -84,7 +88,7 @@ def main():
             # Permitimos al usuario seleccionar el archivo.
             src = select_file()
 
-            # Leemos el archivo.
+            # Leemos el archivo con el texto encriptado.
             with open(src) as f:
                 text = f.read()
 
@@ -99,9 +103,10 @@ def main():
 
             keys = (public_key, private_key)
 
+            # Lista de enteros asociados al texto cifrado.
             ciphertext = [int(c) for c in text.split()] 
 
-            # Obtenemos el mensaje descifrado como una lista de números.
+            # Obtenemos el mensaje descifrado como una cadena.
             msg = rsa.decrypt(ciphertext, keys)
 
             print(f"\nSu texto descifrado es:\n{msg}")
