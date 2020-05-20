@@ -1,6 +1,7 @@
 # Criptosistema RSA (Rivest-Shamir-Adleman) :lock: :key:
 Implementación sencilla de los algoritmos de cifrado y descifrado del criptosistema RSA.
 Se incluye un algoritmo probabilístico de generación de números primos para cifrar textos.
+La prueba de primalidad se realiza con la implementación del algoritmo de Miller-Rabin.
 
 ## Comenzando 🚀
 
@@ -10,7 +11,7 @@ Para hacer uso del criptositema:
 
 2. Colocate en la raíz del proyecto. 
 
-3. Dirigete a la carpeta bin y ejecuta:
+3. Ejecuta:
 ```
 python run.py
 ```
