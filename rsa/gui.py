@@ -8,7 +8,6 @@ class FileBrowser(object):
     Clase para representar un manejador de archivos
     con interfaz gráfica.
     """
-
     def __init__(self, file_path=None):
         """Constructor para la clase."""
         self.__root = Tk()
