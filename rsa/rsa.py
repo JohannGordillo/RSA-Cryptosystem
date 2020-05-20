@@ -4,7 +4,7 @@
 ============================================================
 >> Autor: Johann Gordillo
 >> Email: jgordillo@ciencias.unam.mx
->> Fecha: 14/05/2020
+>> Fecha: 20/05/2020
 ============================================================
 Implementación sencilla del Criptosistema de clave pública
 de Rivest-Shamir-Adleman (RSA).
@@ -17,35 +17,28 @@ Copyright (c) 2020 Johann Gordillo
 ============================================================
 """
 
-from random import randrange, getrandbits
+from random import randrange, randint, getrandbits
 from math import gcd
 
 
-# Alfabeto español de 26 letras.
-alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-
-def generate_prime_number(bits=1024):
+def generate_prime_number(min_length=50, max_length=70):
     """Genera un número primo aleatorio.
 
     >> Argumentos:
-       bits --- int --- Número de bits.
+       length -- int -- Número de dígitos.
     
     >> Regresa:
-       Un número primo con la longitud en bits dada.
+       Un número primo con la cantidad de dígitos
+       indicada.
     """
+    if max_length < min_length:
+        raise ValueError("La longitud máxima de dígitos es menor que la mínima.")
+    
     p = 0
 
     while not is_prime(p, 2):
-        # Generamos bits aleatorios.
-        p = getrandbits(bits)
-
-        # Hacemos que el bit más significativo sea 1, para
-        # asegurarnos de que el número de bits no cambie.
-        # ---
-        # Hacemos que el bit menos significativo sea 1,
-        # para asegurarnos de que el número no sea par.
-        p |= (1 << bits - 1) | 1
+        # Generamos un entero aleatorio.
+        p = randint(pow(10, min_length - 1), pow(10, max_length) - 1)
 
     return p
 
@@ -93,7 +86,6 @@ def is_prime(n, k):
         a = randrange(2, n - 1)
 
         # Calculamos b = (a ^ r) (mód n)
-        #b = mod_exp(a, r, n)
         b = pow(a, r, n)
 
         # Si 'b' es congruente con +1 ó -1 (mód n), es problable primo.
@@ -105,7 +97,6 @@ def is_prime(n, k):
         else:
             i = 1
             while i < s and b != n - 1:
-                #b = mod_exp(b, 2, n)
                 b = pow(b, 2, n)
                 if b == 1:
                     return False
@@ -117,21 +108,43 @@ def is_prime(n, k):
     return True
 
 
-def mod_multiplicative_inverse(n, m):
-    """Devuelve el inverso multiplicativo de n modulo m.
+def extended_gcd(n, m):
+    """Implementación del Algoritmo de Euclides Extendido.
 
     >> Argumentos:
-       n --- int --- Un entero cualquiera.
+        a --- int --- Un entero cualquiera.
+        b --- int --- Un entero cualquiera.
+
+    >> Regresa:
+        Una tupla (g, s, t) donde g es el máximo común divisor
+        de 'n' y 'm', y se tiene que g = ns + mt.
+    """
+    if n == 0 :   
+        return (m, 0, 1)
+             
+    g, s1, t1 = extended_gcd(m % n, n)  
+     
+    s = t1 - (m // n) * s1  
+    t = s1  
+     
+    return (g, s, t) 
+
+
+def mod_multiplicative_inverse(n, m):
+    """Devuelve el inverso multiplicativo de n modulo m.
+    Se da por hecho que n es invertible en Zm.
+
+    >> Argumentos:
+       n --- int --- Un entero invertible en Zm.
        m --- int --- Un entero cualquiera.
     
     >> Regresa:
        El inverso de n en el anillo Zm.
     """
-    n = n % m
-    for x in range(1, m): 
-        if ((n * x) % m == 1): 
-            return x 
-    return 1
+    # Se tiene que gcd(n, m) = ns + mt
+    g, s, _ = extended_gcd(n, m)
+    inverse = s % m
+    return inverse
 
 
 def generate_keys(p, q):
@@ -160,7 +173,7 @@ def generate_keys(p, q):
     # (e * d) sea congruente con 1 (mód phi).
     d = mod_multiplicative_inverse(e, phi)
 
-    public_key = (e, n)
+    public_key = (n, e)
     private_key = d
 
     return (public_key, private_key)
@@ -171,15 +184,14 @@ def encrypt(public_key, msg):
 
     >> Argumentos:
         public_key --- tuple[int] --- La clave pública.
-        msg --- List[int] --- Una lista de enteros con
-        el mensaje a cifrar.
+        msg --- string --- Una cadena con el mensaje.
 
     >> Regresa:
-        ciphertext --- List[int] --- Una lista de numeros con el
-        mensaje cifrado.
+        ciphertext --- string --- Una cadena con el mensaje
+        cifrado.
     """
-    n, e = public_key 
-    ciphertext = [pow(m, e, n) for m in msg]
+    n, e = public_key
+    ciphertext = [pow(m, e, n) for m in text_to_numbers(msg)]
     return ciphertext
 
 
@@ -187,18 +199,18 @@ def decrypt(ciphertext, keys):
     """Funcion Decrypt.
 
     >> Argumentos:
-        ciphertext --- List[int] --- Una lista de numeros.
+        ciphertext --- string --- Una cadena.
         d --- int --- La llave privada.
         n --- int --- El numero de entrada.
 
     >> Regresa:
-        msg --- List[int] --- Una lista de numeros con el
+        msg --- string --- Una cadena con el
         mensaje descifrado.
     """
     public_key, private_key = keys
     n, e = public_key 
-    msg = [pow(c, private_key, n) % 26 for c in ciphertext]
-    return msg
+    msg = [pow(c, private_key, n) for c in ciphertext]
+    return numbers_to_text(msg)
 
 
 def numbers_to_text(nums):
@@ -211,5 +223,19 @@ def numbers_to_text(nums):
     >> Regresa:
         text --- Una cadena de texto.
     """
-    text = ''.join([alphabet[n % 26] for n in nums])
+    text = ''.join([chr(n) for n in nums])
     return text
+
+
+def text_to_numbers(text):
+    """Pasa una lista de caracteres a una lista
+    de números enteros.
+
+    >> Argumentos:
+        nums --- Una lista de carácteres.
+
+    >> Regresa:
+        text --- Una lista de enteros.
+    """
+    nums = [ord(c) for c in text]
+    return nums
