@@ -32,7 +32,8 @@ def generate_prime_number(min_length=50, max_length=70):
        indicada.
     """
     if max_length < min_length:
-        raise ValueError("La longitud máxima de dígitos es menor que la mínima.")
+        error_msg = "La longitud máxima de dígitos es menor que la mínima."
+        raise ValueError(error_msg)
     
     p = 0
 
@@ -127,7 +128,7 @@ def extended_gcd(n, m):
     s = t1 - (m // n) * s1  
     t = s1  
      
-    return (g, s, t) 
+    return (g, s, t)
 
 
 def mod_multiplicative_inverse(n, m):
