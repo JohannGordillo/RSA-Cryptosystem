@@ -22,6 +22,9 @@ def select_file():
     """Permite al usuario seleccionar un archivo
     con ayuda de una interfaz gráfica.
 
+    >> Argumentos:
+       Ninguno.
+
     >> Regresa:
        La ruta del archivo.
     """
@@ -31,9 +34,7 @@ def select_file():
 
 
 def print_menu():
-    """
-    Imprime el menú de selección.
-    """
+    """Imprime el menú de selección."""
     clean_console()
     genera_marco()
     print("Menú de Selección".center(80, ' '))
@@ -50,6 +51,7 @@ def main():
         print_menu()
         op = int(input("\nSeleccione una opcion: "))
 
+        # Cifrado.
         if op == 1:
             # Permitimos al usuario seleccionar el archivo.
             src = select_file()
@@ -76,7 +78,8 @@ def main():
 
             input("\nPresione <ENTER> para continuar... ")
             clean_console()
-            
+        
+        # Descifrado.
         elif op == 2:
             # Permitimos al usuario seleccionar el archivo.
             src = select_file()
@@ -86,7 +89,7 @@ def main():
                 text = f.read()
 
             # Obtenemos la llave pública.
-            print(">> Ingrese la llave pública [n, e]: (ejemplo: 567 785): ")
+            print(">> Ingrese la llave pública [n, e] (ejemplo: 567 785): ")
             n, e =  map(int, input().split())
             public_key = (n, e)
 
@@ -106,11 +109,13 @@ def main():
             input("\nPresione <ENTER> para continuar... ")
             clean_console()
 
+        # Salir del programa.
         elif op == 3:
             clean_console()
             print("Hasta luego! Gracias por utilizar el programa :D")
             break
-
+        
+        # Opción inválida.
         else:
             print("Opción no válida.")
             input("\nPresione <ENTER> para continuar... ")
