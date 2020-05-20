@@ -59,10 +59,10 @@ def main():
                 msg = f.read()
 
             # Generamos dos primos aleatorios distintos de entre 50 y 60 dígitos.
-            p = rsa.generate_prime_number(1, 2)
+            p = rsa.generate_prime_number(50, 60)
             q = p
             while q == p:
-                q = rsa.generate_prime_number(1, 2)
+                q = rsa.generate_prime_number(50, 60)
 
             public_key, private_key = rsa.generate_keys(p, q)
 
