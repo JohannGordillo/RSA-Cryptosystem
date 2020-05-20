@@ -7,13 +7,16 @@ La prueba de primalidad se realiza con el algoritmo de Miller-Rabin.
 
 Para hacer uso del criptositema:
 
-1. Descarga o clona el repositorio en tu computadora.
+1. Descarga o clona el repositorio en tu computadora:
+```
+git clone https://github.com/JohannGordillo/RSA-Cryptosystem.git
+```
 
 2. Colocate en la raíz del proyecto. 
 
-3. Ejecuta:
+3. Instala el paquete:
 ```
-python run.py
+pip install .
 ```
 
 4. Podrás seleccionar en consola una de las opciones: cifrar o descifrar.
