@@ -3,6 +3,9 @@ Implementación de los algoritmos de cifrado y descifrado del criptosistema RSA.
 Se incluye un algoritmo probabilístico de generación de números primos.
 La prueba de primalidad se realiza con el algoritmo de Miller-Rabin.
 
+## Advertencia :warning:
+El presente proyecto ha sido diseñado únicamente con fines educativos, no se recomienda su uso para propósitos de seguridad informática.
+
 ## Comenzando 🚀
 
 Para hacer uso del criptositema:
@@ -42,7 +45,7 @@ descifrado.
 pip uninstall rsa
 ```
 
-### Pre-requisitos 📋
+## Pre-requisitos 📋
 
 * Python 3.x
 
